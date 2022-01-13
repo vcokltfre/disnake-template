@@ -17,6 +17,7 @@ ormar = "^0.10.23"
 aioredis = "^2.0.1"
 python-dotenv = "^0.19.2"
 fakeredis = "^1.7.0"
+psycopg2-binary = "^2.9.3"
 
 [tool.poetry.dev-dependencies]
 black = "^21.12b0"
