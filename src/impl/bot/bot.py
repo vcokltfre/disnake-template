@@ -7,10 +7,14 @@ from loguru import logger
 
 from src.impl.database import database
 
+from .status import StatusHeartbeater
+
 
 class Bot(_Bot):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+
+        self._status = StatusHeartbeater()
 
         if not (redis_uri := getenv("REDIS_URI")):
             self.redis = FakeRedis()
@@ -23,6 +27,8 @@ class Bot(_Bot):
         await database.connect()
 
         logger.info("Connected to the database.")
+
+        self._status.run()
 
         await super().start(*args, **kwargs)
 
