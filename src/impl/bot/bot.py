@@ -1,4 +1,5 @@
 from os import getenv
+from typing import Any
 
 from aioredis import Redis, from_url
 from disnake.ext.commands import Bot as _Bot
@@ -11,7 +12,7 @@ from .status import StatusHeartbeater
 
 
 class Bot(_Bot):
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
         self._status = StatusHeartbeater()
@@ -21,7 +22,7 @@ class Bot(_Bot):
         else:
             self.redis: Redis = from_url(redis_uri)
 
-    async def start(self, *args, **kwargs) -> None:
+    async def start(self, token: str, *, reconnect: bool = True) -> None:
         logger.info("Connecting to the database...")
 
         await database.connect()
@@ -30,7 +31,7 @@ class Bot(_Bot):
 
         self._status.run()
 
-        await super().start(*args, **kwargs)
+        await super().start(token, reconnect=reconnect)
 
     async def on_connect(self) -> None:
         logger.info("Connected to the Discord Gateway.")
@@ -38,7 +39,7 @@ class Bot(_Bot):
     async def on_ready(self) -> None:
         logger.info(f"READY event received, connected as {self.user} with {len(self.guilds)} guilds.")
 
-    def load_extension(self, ext: str) -> None:
-        super().load_extension(ext)
+    def load_extension(self, name: str, *, package: str | None = None) -> None:
+        super().load_extension(name, package=package)
 
-        logger.info(f"Loaded extension {ext}.")
+        logger.info(f"Loaded extension {name}.")
