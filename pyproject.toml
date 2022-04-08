@@ -27,6 +27,8 @@ pre-commit = "^2.16.0"
 [tool.taskipy.tasks]
 start = "python -m src"
 lint = "black . && isort --profile black ."
+revision = "alembic revision --autogenerate -m"
+upgrade = "alembic upgrade head"
 
 [tool.black]
 line-length = 120
@@ -35,7 +37,7 @@ line-length = 120
 reportMissingTypeStubs = false
 reportUnknownMemberType = false
 ignore = [
-    "alembic/",
+    "src/alembic/",
 ]
 
 [build-system]
