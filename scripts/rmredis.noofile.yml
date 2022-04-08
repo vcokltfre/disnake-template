@@ -33,3 +33,8 @@ steps:
           - src/impl/bot/bot.py
         src: "        if not (redis_uri := getenv(\"REDIS_URI\")):\n            self.redis = FakeRedis()\n        else:\n            self.redis: Redis = from_url(redis_uri)\n\n"
         dest: ""
+      - action: replace
+        files:
+          - README.md
+        src: " If Redis is not configured in your .env file the bot will use an in-memory fakeredis instance."
+        dest: ""
