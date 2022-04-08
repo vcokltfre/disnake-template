@@ -1,0 +1,15 @@
+name: Setup Jishaku
+noo_version: 2
+
+read: []
+
+steps:
+  - name: Setup Jishaku
+    actions:
+      - action: command
+        command: poetry add jishaku
+      - action: replace
+        files:
+          - src/__main__.py
+        src: "    extensions: list[str] = []"
+        dest: "    extensions: list[str] = [\n        \"jishaku\",\n    ]"
