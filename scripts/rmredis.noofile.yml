@@ -1,0 +1,35 @@
+name: Remove Redis
+noo_version: 2
+
+read: []
+
+steps:
+  - name: Remove Redis
+    actions:
+      - action: command
+        command: poetry remove aioredis fakeredis
+      - action: replace
+        files:
+          - .env.example
+        src: "REDIS_URI=\n"
+        dest: ""
+      - action: replace
+        files:
+          - src/impl/bot/bot.py
+        src: "from fakeredis.aioredis import FakeRedis\n"
+        dest: ""
+      - action: replace
+        files:
+          - src/impl/bot/bot.py
+        src: "from aioredis import Redis, from_url\n"
+        dest: ""
+      - action: replace
+        files:
+          - src/impl/bot/bot.py
+        src: "from aioredis.commands import RedisScript\n"
+        dest: ""
+      - action: replace
+        files:
+          - src/impl/bot/bot.py
+        src: "        if not (redis_uri := getenv(\"REDIS_URI\")):\n            self.redis = FakeRedis()\n        else:\n            self.redis: Redis = from_url(redis_uri)\n\n"
+        dest: ""
