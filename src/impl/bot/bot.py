@@ -3,6 +3,7 @@ from typing import Any
 
 from aioredis import Redis, from_url
 from disnake.ext.commands import Bot as _Bot
+from disnake import Intents
 from fakeredis.aioredis import FakeRedis
 from loguru import logger
 
@@ -12,8 +13,21 @@ from .status import StatusHeartbeater
 
 
 class Bot(_Bot):
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
+    def __init__(
+        self,
+        intents: Intents,
+        *args: Any,
+        command_prefix: str | list[str] | None = None,
+        description: str = "",
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(
+            *args,
+            command_prefix=command_prefix,
+            description=description,
+            intents=intents,
+            **kwargs,
+        )
 
         self._status = StatusHeartbeater()
 
